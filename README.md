@@ -70,6 +70,8 @@ environments:
 summary: "Script A"
 type: script # or inline
 run: "./main.sh" # or "echo hello" if inline
+before: "echo 'Starting...'"
+after: "echo 'Finished!'"
 environments:
   LOCAL_VAR: "123"
 ```
