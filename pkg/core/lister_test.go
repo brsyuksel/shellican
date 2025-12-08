@@ -17,7 +17,9 @@ func TestListCollections(t *testing.T) {
 	}
 
 	// One collection
-	CreateCollection("col1")
+	if err := CreateCollection("col1"); err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
 	err = ListCollections()
 	if err != nil {
 		t.Errorf("ListCollections failed for one: %v", err)
@@ -28,7 +30,9 @@ func TestListRunnables(t *testing.T) {
 	tempDir := t.TempDir()
 	t.Setenv("SHELLICAN_HOME", tempDir)
 
-	CreateCollection("col1")
+	if err := CreateCollection("col1"); err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
 	// Add runnable to collection.yml
 	colPath := filepath.Join(tempDir, ".shellican", "col1", "collection.yml")
 	content := `

@@ -83,7 +83,7 @@ func importTarball(path, target string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		os.RemoveAll(target) // Cleanup
+		_ = os.RemoveAll(target) // Cleanup
 		return fmt.Errorf("tar extraction failed: %w", err)
 	}
 	return nil

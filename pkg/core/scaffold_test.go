@@ -37,7 +37,9 @@ func TestCreateRunnable(t *testing.T) {
 	t.Setenv("SHELLICAN_HOME", tempDir)
 
 	colName := "test-col"
-	CreateCollection(colName)
+	if err := CreateCollection(colName); err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
 
 	runName := "test-run"
 	err := CreateRunnable(colName, runName)

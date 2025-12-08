@@ -27,7 +27,7 @@ func ListCollections() error {
 	}
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "NAME\tDESCRIPTION")
+	_, _ = fmt.Fprintln(w, "NAME\tDESCRIPTION")
 
 	var names []string
 	configs := make(map[string]*config.CollectionConfig)
@@ -46,9 +46,11 @@ func ListCollections() error {
 		if cfg := configs[name]; cfg != nil && cfg.Help != "" {
 			desc = cfg.Help
 		}
-		fmt.Fprintf(w, "%s\t%s\n", name, desc)
+		_, _ = fmt.Fprintf(w, "%s\t%s\n", name, desc)
 	}
-	w.Flush()
+	if err := w.Flush(); err != nil {
+		return fmt.Errorf("failed to flush writer: %w", err)
+	}
 	return nil
 }
 
@@ -70,7 +72,7 @@ func ListRunnables(collectionName string) error {
 	}
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "NAME\tDESCRIPTION")
+	_, _ = fmt.Fprintln(w, "NAME\tDESCRIPTION")
 
 	// We only list what is in Runnables list
 	if len(colCfg.Runnables) == 0 {
@@ -87,9 +89,11 @@ func ListRunnables(collectionName string) error {
 			desc = runCfg.Help
 		}
 
-		fmt.Fprintf(w, "%s\t%s\n", name, desc)
+		_, _ = fmt.Fprintf(w, "%s\t%s\n", name, desc)
 	}
 
-	w.Flush()
+	if err := w.Flush(); err != nil {
+		return fmt.Errorf("failed to flush writer: %w", err)
+	}
 	return nil
 }

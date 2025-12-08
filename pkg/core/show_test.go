@@ -8,7 +8,9 @@ func TestShowCollection(t *testing.T) {
 	tempDir := t.TempDir()
 	t.Setenv("SHELLICAN_HOME", tempDir)
 
-	CreateCollection("col1")
+	if err := CreateCollection("col1"); err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
 	err := ShowCollection("col1", false)
 	if err != nil {
 		t.Errorf("ShowCollection failed: %v", err)
@@ -24,9 +26,13 @@ func TestShowRunnable(t *testing.T) {
 	tempDir := t.TempDir()
 	t.Setenv("SHELLICAN_HOME", tempDir)
 
-	CreateCollection("col1")
+	if err := CreateCollection("col1"); err != nil {
+		t.Fatalf("setup failed: %v", err)
+	}
 	// Manually construct proper runnable setup since CreateRunnable does minimal config
-	CreateRunnable("col1", "run1")
+	if err := CreateRunnable("col1", "run1"); err != nil {
+		t.Fatalf("setup run failed: %v", err)
+	}
 
 	err := ShowRunnable("col1", "run1", false)
 	if err != nil {
