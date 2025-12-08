@@ -14,8 +14,12 @@ func TestImportCollection_Folder(t *testing.T) {
 
 	// Prepare source
 	sourceDir := filepath.Join(tempDir, "source")
-	os.MkdirAll(sourceDir, 0755)
-	os.WriteFile(filepath.Join(sourceDir, "test.txt"), []byte("data"), 0644)
+	if err := os.MkdirAll(sourceDir, 0755); err != nil {
+		t.Fatalf("failed to create source dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourceDir, "test.txt"), []byte("data"), 0644); err != nil {
+		t.Fatalf("failed to write test file: %v", err)
+	}
 
 	err := ImportCollection(sourceDir, "imported-folder")
 	if err != nil {
@@ -35,8 +39,12 @@ func TestImportCollection_Tarball(t *testing.T) {
 
 	// Prepare tarball
 	contentDir := filepath.Join(tempDir, "content")
-	os.MkdirAll(contentDir, 0755)
-	os.WriteFile(filepath.Join(contentDir, "data.txt"), []byte("tar-data"), 0644)
+	if err := os.MkdirAll(contentDir, 0755); err != nil {
+		t.Fatalf("failed to create content dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(contentDir, "data.txt"), []byte("tar-data"), 0644); err != nil {
+		t.Fatalf("failed to write data file: %v", err)
+	}
 
 	tarFile := filepath.Join(tempDir, "test.tar.gz")
 	cmd := exec.Command("tar", "-czf", tarFile, "-C", contentDir, ".")

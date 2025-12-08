@@ -14,8 +14,12 @@ func TestExportCollection(t *testing.T) {
 	// Create collection to export
 	colName := "export-test"
 	colDir := filepath.Join(envHome, ".shellican", colName)
-	os.MkdirAll(colDir, 0755)
-	os.WriteFile(filepath.Join(colDir, "file.txt"), []byte("content"), 0644)
+	if err := os.MkdirAll(colDir, 0755); err != nil {
+		t.Fatalf("failed to create collection dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(colDir, "file.txt"), []byte("content"), 0644); err != nil {
+		t.Fatalf("failed to write content file: %v", err)
+	}
 
 	outputFile := filepath.Join(tempDir, "output.tar.gz")
 
