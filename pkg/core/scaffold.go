@@ -22,16 +22,24 @@ func CreateCollection(name string) error {
 		return fmt.Errorf("failed to create collection directory: %w", err)
 	}
 
-	configContent := fmt.Sprintf(`name: "Description for %s"
+	configContent := fmt.Sprintf(`name: "%s"
 help: "Usage for %s"
 readme: "README.md"
 runnables: []
   # - example_runnable
+environments:
+  COLLECTION_ENV: "value"
 `, name, name)
 
 	configPath := filepath.Join(collectionPath, "collection.yml")
 	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
 		return fmt.Errorf("failed to write collection.yml: %w", err)
+	}
+
+	readmeContent := fmt.Sprintf("# %s\n\nDescription for %s\n", name, name)
+	readmePath := filepath.Join(collectionPath, "README.md")
+	if err := os.WriteFile(readmePath, []byte(readmeContent), 0644); err != nil {
+		fmt.Printf("Warning: failed to create README.md: %v\n", err)
 	}
 
 	fmt.Printf("Collection '%s' created at %s\n", name, collectionPath)
@@ -59,15 +67,25 @@ func CreateRunnable(collectionName, runnableName string) error {
 		return fmt.Errorf("failed to create runnable directory: %w", err)
 	}
 
-	configContent := fmt.Sprintf(`name: "Description for %s"
+	configContent := fmt.Sprintf(`name: "%s"
 help: "Usage for %s"
-type: "inline"
+readme: "README.md"
 run: "echo 'Hello from %s'"
+# before: "echo 'Running before'"
+# after: "echo 'Running after'"
+environments:
+  RUNNABLE_ENV: "value"
 `, runnableName, runnableName, runnableName)
 
 	configPath := filepath.Join(runnablePath, "runnable.yml")
 	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
 		return fmt.Errorf("failed to write runnable.yml: %w", err)
+	}
+
+	readmeContent := fmt.Sprintf("# %s\n\nDescription for %s\n", runnableName, runnableName)
+	readmePath := filepath.Join(runnablePath, "README.md")
+	if err := os.WriteFile(readmePath, []byte(readmeContent), 0644); err != nil {
+		fmt.Printf("Warning: failed to create README.md: %v\n", err)
 	}
 
 	fmt.Printf("Runnable '%s' created at %s\n", runnableName, runnablePath)

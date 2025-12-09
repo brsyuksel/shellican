@@ -68,12 +68,7 @@ func ShowRunnable(collectionName, runnableName string, showReadme bool) error {
 	fmt.Printf("Runnable:   %s (Collection: %s)\n", runnableName, collectionName)
 	fmt.Printf("Name:       %s\n", cfg.Name)
 	fmt.Printf("Help:       %s\n", cfg.Help)
-	fmt.Printf("Type:       %s\n", cfg.Type)
-	if cfg.Type == "inline" {
-		fmt.Printf("Run Code:   %s\n", cfg.Run)
-	} else {
-		fmt.Printf("Run Script: %s\n", cfg.Run)
-	}
+	fmt.Printf("Run:        %s\n", cfg.Run)
 
 	if showReadme && cfg.Readme != "" {
 		readmePath := filepath.Join(runnablePath, cfg.Readme)

@@ -70,17 +70,14 @@ environments:
   GLOBAL_VAR: "true"
 ```
 
-**runnable.yml**
+**script-a/runnable.yml**
 ```yaml
 name: "Script A"
 help: "This script does something awesome"
 readme: "README.md"
-type: script # or inline
-run: "./main.sh" # or "echo hello" if inline
-before:
-  - "echo 'Starting...'"
-after:
-  - "echo 'Finished!'"
+run: "./main.sh" # or "echo hello"
+before: "echo 'Starting...'"
+after: "echo 'Finished!'"
 environments:
   LOCAL_VAR: "123"
 ```

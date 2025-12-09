@@ -46,7 +46,6 @@ func TestLoadRunnableConfig(t *testing.T) {
 	configFile := filepath.Join(tempDir, "runnable.yml")
 	content := `
 name: "Test Runnable"
-type: "inline"
 run: "echo hello"
 environments:
   RUN_KEY: RUN_VALUE
@@ -62,9 +61,6 @@ environments:
 
 	if cfg.Name != "Test Runnable" {
 		t.Errorf("Expected name 'Test Runnable', got '%s'", cfg.Name)
-	}
-	if cfg.Type != "inline" {
-		t.Errorf("Expected type 'inline', got '%s'", cfg.Type)
 	}
 	if cfg.Environments["RUN_KEY"] != "RUN_VALUE" {
 		t.Errorf("Environment variable mismatch")

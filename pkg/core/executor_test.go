@@ -48,7 +48,6 @@ environments:
 
 	// Create runnable.yml
 	runContent := `
-type: inline
 run: echo hi
 environments:
   RUN_ENV: "run"
@@ -61,10 +60,6 @@ environments:
 	ctx, err := ResolveCommand(colName, []string{runName})
 	if err != nil {
 		t.Fatalf("ResolveCommand failed: %v", err)
-	}
-
-	if ctx.Config.Type != "inline" {
-		t.Errorf("Expected inline type, got %s", ctx.Config.Type)
 	}
 	if ctx.Environments["COL_ENV"] != "col" {
 		t.Errorf("Missing collection env")
@@ -85,7 +80,7 @@ environments:
 	if err := os.MkdirAll(hiddenRunDir, 0755); err != nil {
 		t.Fatalf("failed to create hidden run dir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(hiddenRunDir, "runnable.yml"), []byte("type: inline"), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(hiddenRunDir, "runnable.yml"), []byte("run: echo hi"), 0644); err != nil {
 		t.Fatalf("failed to write hidden runnable config: %v", err)
 	}
 
@@ -103,8 +98,7 @@ func TestExecuteContext(t *testing.T) {
 	ctx := &ExecutionContext{
 		RunnablePath: "/tmp", // dummy
 		Config: &config.RunnableConfig{
-			Type: "inline",
-			Run:  "true",
+			Run: "true",
 		},
 		Environments: map[string]string{},
 	}
