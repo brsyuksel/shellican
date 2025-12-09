@@ -1,10 +1,14 @@
-# Shellican
+# shellican
+
+<div align="center">
+  <img src="assets/shellican-logo.png" alt="shellican logo" width="300" />
+</div>
+
+**shellican** (*shell-i-can*) is a powerful CLI for managing runnables (scripts/commands) in collections. It allows you to organize your shell scripts, define their environment, and run them easily.
 
 ![CI](https://github.com/brsyuksel/shellican/actions/workflows/ci.yml/badge.svg)
 ![Release](https://github.com/brsyuksel/shellican/actions/workflows/release.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brsyuksel/shellican)](https://goreportcard.com/report/github.com/brsyuksel/shellican)
-
-Shellican (shell-i-can) is a powerful CLI for managing runnables (scripts/commands) in collections. It allows you to organize your shell scripts, define their environment, and run them easily.
 
 ## Features
 
