@@ -25,7 +25,7 @@ func ShowCollection(name string, showReadme bool) error {
 	}
 
 	fmt.Printf("Collection: %s\n", name)
-	fmt.Printf("Summary:    %s\n", cfg.Summary)
+	fmt.Printf("Name:       %s\n", cfg.Name)
 	fmt.Printf("Help:       %s\n", cfg.Help)
 
 	if showReadme && cfg.Readme != "" {
@@ -66,7 +66,7 @@ func ShowRunnable(collectionName, runnableName string, showReadme bool) error {
 	}
 
 	fmt.Printf("Runnable:   %s (Collection: %s)\n", runnableName, collectionName)
-	fmt.Printf("Summary:    %s\n", cfg.Summary)
+	fmt.Printf("Name:       %s\n", cfg.Name)
 	fmt.Printf("Help:       %s\n", cfg.Help)
 	fmt.Printf("Type:       %s\n", cfg.Type)
 	if cfg.Type == "inline" {

@@ -22,7 +22,7 @@ func CreateCollection(name string) error {
 		return fmt.Errorf("failed to create collection directory: %w", err)
 	}
 
-	configContent := fmt.Sprintf(`summary: "Description for %s"
+	configContent := fmt.Sprintf(`name: "Description for %s"
 help: "Usage for %s"
 readme: "README.md"
 runnables: []
@@ -59,7 +59,7 @@ func CreateRunnable(collectionName, runnableName string) error {
 		return fmt.Errorf("failed to create runnable directory: %w", err)
 	}
 
-	configContent := fmt.Sprintf(`summary: "Description for %s"
+	configContent := fmt.Sprintf(`name: "Description for %s"
 help: "Usage for %s"
 type: "inline"
 run: "echo 'Hello from %s'"

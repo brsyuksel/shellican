@@ -10,7 +10,7 @@ func TestLoadCollectionConfig(t *testing.T) {
 	tempDir := t.TempDir()
 	configFile := filepath.Join(tempDir, "collection.yml")
 	content := `
-summary: "Test Collection"
+name: "Test Collection"
 help: "This is a test"
 runnables:
   - test-runnable
@@ -30,8 +30,8 @@ environments:
 		t.Fatal("Expected config to be loaded, got nil")
 	}
 
-	if cfg.Summary != "Test Collection" {
-		t.Errorf("Expected summary 'Test Collection', got '%s'", cfg.Summary)
+	if cfg.Name != "Test Collection" {
+		t.Errorf("Expected name 'Test Collection', got '%s'", cfg.Name)
 	}
 	if len(cfg.Runnables) != 1 || cfg.Runnables[0] != "test-runnable" {
 		t.Errorf("Runnables mismatch")
@@ -45,7 +45,7 @@ func TestLoadRunnableConfig(t *testing.T) {
 	tempDir := t.TempDir()
 	configFile := filepath.Join(tempDir, "runnable.yml")
 	content := `
-summary: "Test Runnable"
+name: "Test Runnable"
 type: "inline"
 run: "echo hello"
 environments:
@@ -60,8 +60,8 @@ environments:
 		t.Fatalf("Failed to load runnable config: %v", err)
 	}
 
-	if cfg.Summary != "Test Runnable" {
-		t.Errorf("Expected summary 'Test Runnable', got '%s'", cfg.Summary)
+	if cfg.Name != "Test Runnable" {
+		t.Errorf("Expected name 'Test Runnable', got '%s'", cfg.Name)
 	}
 	if cfg.Type != "inline" {
 		t.Errorf("Expected type 'inline', got '%s'", cfg.Type)

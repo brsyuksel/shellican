@@ -57,8 +57,9 @@ Default storage location: `~/.shellican` (or `$SHELLICAN_HOME/.shellican`).
 
 **collection.yml**
 ```yaml
-summary: "My Scripts"
+name: "My Scripts"
 help: "A collection of useful scripts"
+readme: "README.md"
 runnables:
   - script-a
 environments:
@@ -67,11 +68,15 @@ environments:
 
 **runnable.yml**
 ```yaml
-summary: "Script A"
+name: "Script A"
+help: "This script does something awesome"
+readme: "README.md"
 type: script # or inline
 run: "./main.sh" # or "echo hello" if inline
-before: "echo 'Starting...'"
-after: "echo 'Finished!'"
+before:
+  - "echo 'Starting...'"
+after:
+  - "echo 'Finished!'"
 environments:
   LOCAL_VAR: "123"
 ```

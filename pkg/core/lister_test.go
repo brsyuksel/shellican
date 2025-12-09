@@ -48,7 +48,7 @@ runnables:
 	if err := os.MkdirAll(runPath, 0755); err != nil {
 		t.Fatalf("failed to create run dir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(runPath, "runnable.yml"), []byte("summary: test"), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(runPath, "runnable.yml"), []byte("name: test"), 0644); err != nil {
 		t.Fatalf("failed to write runnable config: %v", err)
 	}
 

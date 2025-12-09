@@ -9,7 +9,7 @@ import (
 )
 
 type CollectionConfig struct {
-	Summary      string            `yaml:"summary"`
+	Name         string            `yaml:"name"`
 	Help         string            `yaml:"help"`
 	Readme       string            `yaml:"readme"`
 	Runnables    []string          `yaml:"runnables"`
@@ -17,7 +17,7 @@ type CollectionConfig struct {
 }
 
 type RunnableConfig struct {
-	Summary      string            `yaml:"summary"`
+	Name         string            `yaml:"name"`
 	Help         string            `yaml:"help"`
 	Readme       string            `yaml:"readme"`
 	Run          string            `yaml:"run"`
