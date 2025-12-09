@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-// CreateCollection creates a new collection directory and a default collection.yml
+// CreateCollection creates a new collection.
 func CreateCollection(name string) error {
 	rootDir, err := getRoot()
 	if err != nil {
@@ -46,7 +46,7 @@ environments:
 	return nil
 }
 
-// CreateRunnable creates a new runnable directory and a default runnable.yml within a collection
+// CreateRunnable creates a new runnable.
 func CreateRunnable(collectionName, runnableName string) error {
 	rootDir, err := getRoot()
 	if err != nil {

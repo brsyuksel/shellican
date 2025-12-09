@@ -8,7 +8,7 @@ import (
 	"github.com/brsyuksel/shellican/pkg/config"
 )
 
-// ShowCollection prints details about a collection
+// ShowCollection prints details about a collection.
 func ShowCollection(name string, showReadme bool) error {
 	rootDir, err := getRoot()
 	if err != nil {
@@ -44,7 +44,7 @@ func ShowCollection(name string, showReadme bool) error {
 	return nil
 }
 
-// ShowRunnable prints details about a runnable
+// ShowRunnable prints details about a runnable.
 func ShowRunnable(collectionName, runnableName string, showReadme bool) error {
 	rootDir, err := getRoot()
 	if err != nil {
@@ -58,7 +58,6 @@ func ShowRunnable(collectionName, runnableName string, showReadme bool) error {
 		return fmt.Errorf("failed to load runnable config: %w", err)
 	}
 	if cfg == nil {
-		// Try to see if it is just unlisted or really non-existent
 		if _, err := os.Stat(runnablePath); os.IsNotExist(err) {
 			return fmt.Errorf("runnable '%s' not found in collection '%s'", runnableName, collectionName)
 		}

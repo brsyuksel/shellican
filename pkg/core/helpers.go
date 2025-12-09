@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// getRoot resolves the root directory.
 func getRoot() (string, error) {
 	if envHome := os.Getenv("SHELLICAN_HOME"); envHome != "" {
 		return filepath.Join(envHome, ".shellican"), nil
