@@ -21,8 +21,6 @@ func ImportCollection(source, name string) error {
 			name = strings.TrimSuffix(base, ".git")
 		} else if strings.HasSuffix(base, ".tar.gz") {
 			name = strings.TrimSuffix(base, ".tar.gz")
-		} else if strings.HasSuffix(base, ".tgz") {
-			name = strings.TrimSuffix(base, ".tgz")
 		} else {
 			name = base
 		}
@@ -37,7 +35,7 @@ func ImportCollection(source, name string) error {
 		return importGit(source, targetDir)
 	}
 
-	if strings.HasSuffix(source, ".tar.gz") || strings.HasSuffix(source, ".tgz") {
+	if strings.HasSuffix(source, ".tar.gz") {
 		return importTarball(source, targetDir)
 	}
 
