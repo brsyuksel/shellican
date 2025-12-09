@@ -10,6 +10,10 @@
 ![Release](https://github.com/brsyuksel/shellican/actions/workflows/release.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brsyuksel/shellican)](https://goreportcard.com/report/github.com/brsyuksel/shellican)
 
+<div align="center">
+  <img src="assets/shellican.gif" alt="shellican demo" width="800" />
+</div>
+
 ## Features
 
 - **Collections & Runnables**: Organize your scripts into collections.
