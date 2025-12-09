@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"slices"
-	"strings"
 
 	"github.com/brsyuksel/shellican/pkg/config"
 )
@@ -102,34 +101,29 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 	cfg := ctx.Config
 
 	// Run Before Hooks
-	if len(cfg.Before) > 0 {
+	if cfg.Before != "" {
 		fmt.Println(">> Running pre-hooks...")
-		for _, hook := range cfg.Before {
-			if err := runShell(hook, args, ctx.Environments); err != nil {
-				return fmt.Errorf("pre-hook failed: %s: %w", hook, err)
-			}
+		if err := runShell(cfg.Before, args, ctx.Environments, ctx.RunnablePath); err != nil {
+			return fmt.Errorf("pre-hook failed: %s: %w", cfg.Before, err)
 		}
 	}
 
 	// Run Main Command
-	var err error
-	if cfg.Type == "inline" || cfg.Run != "" {
-		// If Type is inline, run as shell command.
-		// If Type is script, run as file.
-		// Logic:
-		// If cfg.Run starts with ./, it's relative to RunnablePath.
-
-		runCmd := cfg.Run
-		if cfg.Type == "script" || (cfg.Type == "" && strings.HasPrefix(runCmd, "./")) {
-			// Script file execution
-			scriptPath := filepath.Join(ctx.RunnablePath, runCmd)
-			err = runScriptFile(scriptPath, args, ctx.Environments)
-		} else {
-			// Inline shell execution
-			err = runShell(runCmd, args, ctx.Environments)
-		}
-	} else {
+	if cfg.Run == "" {
 		return fmt.Errorf("no 'run' command specified in runnable.yml")
+	}
+
+	// Check if the run command points to an executable file
+	runCmdPath := filepath.Join(ctx.RunnablePath, cfg.Run)
+	info, err := os.Stat(runCmdPath)
+	isScript := err == nil && !info.IsDir()
+
+	if isScript {
+		// Run as script file directly (Passes arguments correctly)
+		err = runScript(runCmdPath, args, ctx.Environments)
+	} else {
+		// Run as inline shell command
+		err = runShell(cfg.Run, args, ctx.Environments, ctx.RunnablePath)
 	}
 
 	if err != nil {
@@ -137,20 +131,18 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 	}
 
 	// Run After Hooks
-	if len(cfg.After) > 0 {
+	if cfg.After != "" {
 		fmt.Println(">> Running post-hooks...")
-		for _, hook := range cfg.After {
-			if err := runShell(hook, args, ctx.Environments); err != nil {
-				fmt.Printf("Warning: post-hook failed: %s: %v\n", hook, err)
-				// Don't fail the whole execution for post-hooks?
-			}
+		if err := runShell(cfg.After, args, ctx.Environments, ctx.RunnablePath); err != nil {
+			fmt.Printf("Warning: post-hook failed: %s: %v\n", cfg.After, err)
+			// Don't fail the whole execution for post-hooks?
 		}
 	}
 
 	return nil
 }
 
-func runScriptFile(path string, args []string, envs map[string]string) error {
+func runScript(path string, args []string, envs map[string]string) error {
 	cmd := exec.Command(path, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -165,7 +157,7 @@ func runScriptFile(path string, args []string, envs map[string]string) error {
 	return cmd.Run()
 }
 
-func runShell(command string, args []string, envs map[string]string) error {
+func runShell(command string, args []string, envs map[string]string, dir string) error {
 	// Basic shell execution.
 	// We pass args as environment variables or just appended?
 	// "inline scripts... commands"
@@ -173,6 +165,7 @@ func runShell(command string, args []string, envs map[string]string) error {
 
 	shellCmd := exec.Command("/bin/sh", "-c", command, "inline-script")
 	shellCmd.Args = append(shellCmd.Args, args...)
+	shellCmd.Dir = dir
 	shellCmd.Stdin = os.Stdin
 	shellCmd.Stdout = os.Stdout
 	shellCmd.Stderr = os.Stderr

@@ -21,9 +21,8 @@ type RunnableConfig struct {
 	Help         string            `yaml:"help"`
 	Readme       string            `yaml:"readme"`
 	Run          string            `yaml:"run"`
-	Type         string            `yaml:"type"` // "script" or "inline"
-	Before       []string          `yaml:"before"`
-	After        []string          `yaml:"after"`
+	Before       string            `yaml:"before"`
+	After        string            `yaml:"after"`
 	Environments map[string]string `yaml:"environments"`
 }
 
