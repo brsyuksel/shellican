@@ -7,6 +7,7 @@ import (
 	"github.com/brsyuksel/shellican/pkg/core"
 )
 
+// main is the entry point for the application.
 func main() {
 	if len(os.Args) < 2 {
 		printUsage()
@@ -79,12 +80,11 @@ func main() {
 
 		subCmd := os.Args[2]
 
-		// Parse --readme flag manually for simplicity or check last arg
 		showReadme := false
 		args := os.Args[3:]
 		if len(args) > 0 && args[len(args)-1] == "--readme" {
 			showReadme = true
-			args = args[:len(args)-1] // Remove flag
+			args = args[:len(args)-1]
 		}
 
 		switch subCmd {
@@ -204,6 +204,7 @@ func main() {
 	}
 }
 
+// printUsage displays the usage information for the CLI.
 func printUsage() {
 	fmt.Println("Usage:")
 	fmt.Println("  shellican run <collection> <runnable> [args...]")

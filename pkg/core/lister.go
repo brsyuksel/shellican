@@ -62,7 +62,6 @@ func ListRunnables(collectionName string) error {
 	}
 	collectionPath := filepath.Join(rootDir, collectionName)
 
-	// Load collection to see explicit list
 	colCfg, err := config.LoadCollectionConfig(collectionPath)
 	if err != nil {
 		return fmt.Errorf("failed to load collection config: %w", err)
@@ -74,7 +73,6 @@ func ListRunnables(collectionName string) error {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	_, _ = fmt.Fprintln(w, "NAME\tDESCRIPTION")
 
-	// We only list what is in Runnables list
 	if len(colCfg.Runnables) == 0 {
 		fmt.Println("No runnables found.")
 		return nil
