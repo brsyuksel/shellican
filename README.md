@@ -14,6 +14,14 @@
   <img src="assets/shellican.gif" alt="shellican demo" width="800" />
 </div>
 
+## Why shellican?
+
+**shellican** bridges the gap between simple shell aliases and complex Makefile setups.
+
+- **Beyond One-Liners & Aliases**: Instead of cluttering your `.zshrc` or `.bashrc` with forgotten aliases, turn them into organized **runnables**. Keep your logic structured, named, and easy to find.
+- **Shareable Workflows**: Stop saying "copy this script and change line 5". With **import / export**, you can package your collections and share them with friends or colleagues. They get a ready-to-run environment without manual editing.
+- **Self-Documenting**: Every runnable supports a `help` description and a full `README`. You (and your team) will know exactly what a script does, even months later.
+
 ## Features
 
 - **Collections & Runnables**: Organize your scripts into collections.
