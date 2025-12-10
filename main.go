@@ -7,6 +7,9 @@ import (
 	"github.com/brsyuksel/shellican/pkg/core"
 )
 
+// version is injected at build time.
+var version = "dev"
+
 // main is the entry point for the application.
 func main() {
 	if len(os.Args) < 2 {
@@ -17,6 +20,9 @@ func main() {
 	command := os.Args[1]
 
 	switch command {
+	case "version":
+		fmt.Println(version)
+
 	case "create-shell":
 		if len(os.Args) < 3 {
 			fmt.Println("Usage: shellican create-shell <collection> [name]")
@@ -180,4 +186,5 @@ func printUsage() {
 	fmt.Println("  shellican show <collection> [runnable] [--readme]")
 	fmt.Println("  shellican import <source> [name]")
 	fmt.Println("  shellican export <collection> [output]")
+	fmt.Println("  shellican version")
 }
