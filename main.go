@@ -3,12 +3,23 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/brsyuksel/shellican/pkg/core"
 )
 
 // version is injected at build time.
 var version = "dev"
+
+func getVersion() string {
+	if version != "dev" {
+		return version
+	}
+	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
+		return info.Main.Version
+	}
+	return version
+}
 
 // main is the entry point for the application.
 func main() {
@@ -21,7 +32,7 @@ func main() {
 
 	switch command {
 	case "version":
-		fmt.Println(version)
+		fmt.Println(getVersion())
 
 	case "create-shell":
 		if len(os.Args) < 3 {
