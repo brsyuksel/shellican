@@ -35,113 +35,79 @@ func main() {
 		fmt.Printf("Shell helper for '%s' created successfully.\n", collection)
 
 	case "new":
-		if len(os.Args) < 3 {
+		args := os.Args[2:]
+		if len(args) < 1 {
 			fmt.Println("Usage:")
-			fmt.Println("  shellican new collection <name>")
-			fmt.Println("  shellican new runnables <collection> <name>")
+			fmt.Println("  shellican new <collection>")
+			fmt.Println("  shellican new <collection> <runnable>")
 			os.Exit(1)
 		}
 
-		subCmd := os.Args[2]
-		switch subCmd {
-		case "collection":
-			if len(os.Args) < 4 {
-				fmt.Println("Usage: shellican new collection <name>")
-				os.Exit(1)
-			}
-			name := os.Args[3]
+		if len(args) == 1 {
+			// creates collection
+			name := args[0]
 			if err := core.CreateCollection(name); err != nil {
 				fmt.Printf("Error creating collection: %v\n", err)
 				os.Exit(1)
 			}
-		case "runnable":
-			if len(os.Args) < 5 {
-				fmt.Println("Usage: shellican new runnable <collection> <name>")
-				os.Exit(1)
-			}
-			collection := os.Args[3]
-			name := os.Args[4]
+		} else if len(args) >= 2 {
+			// creates runnable
+			collection := args[0]
+			name := args[1]
 			if err := core.CreateRunnable(collection, name); err != nil {
 				fmt.Printf("Error creating runnable: %v\n", err)
 				os.Exit(1)
 			}
-		default:
-			fmt.Printf("Unknown type: %s. Use 'collection' or 'runnable'\n", subCmd)
-			os.Exit(1)
 		}
 
 	case "show":
-		if len(os.Args) < 3 {
-			fmt.Println("Usage:")
-			fmt.Println("  shellican show collection <name> [--readme]")
-			fmt.Println("  shellican show runnable <collection> <name> [--readme]")
-			os.Exit(1)
-		}
-
-		subCmd := os.Args[2]
-
+		args := os.Args[2:]
 		showReadme := false
-		args := os.Args[3:]
 		if len(args) > 0 && args[len(args)-1] == "--readme" {
 			showReadme = true
 			args = args[:len(args)-1]
 		}
 
-		switch subCmd {
-		case "collection":
-			if len(args) < 1 {
-				fmt.Println("Usage: shellican show collection <name> [--readme]")
-				os.Exit(1)
-			}
+		if len(args) < 1 {
+			fmt.Println("Usage:")
+			fmt.Println("  shellican show <collection> [--readme]")
+			fmt.Println("  shellican show <collection> <runnable> [--readme]")
+			os.Exit(1)
+		}
+
+		if len(args) == 1 {
+			// show collection
 			name := args[0]
 			if err := core.ShowCollection(name, showReadme); err != nil {
 				fmt.Printf("Error showing collection: %v\n", err)
 				os.Exit(1)
 			}
-		case "runnable":
-			if len(args) < 2 {
-				fmt.Println("Usage: shellican show runnable <collection> <name> [--readme]")
-				os.Exit(1)
-			}
+		} else {
+			// show runnable
 			collection := args[0]
 			name := args[1]
 			if err := core.ShowRunnable(collection, name, showReadme); err != nil {
 				fmt.Printf("Error showing runnable: %v\n", err)
 				os.Exit(1)
 			}
-		default:
-			fmt.Printf("Unknown type: %s. Use 'collection' or 'runnable'\n", subCmd)
-			os.Exit(1)
 		}
 
 	case "list":
-		if len(os.Args) < 3 {
-			fmt.Println("Usage:")
-			fmt.Println("  shellican list collections")
-			fmt.Println("  shellican list runnables <collection>")
-			os.Exit(1)
-		}
+		args := os.Args[2:]
 
-		subCmd := os.Args[2]
-		switch subCmd {
-		case "collections":
+		if len(args) == 0 {
+			// list collections
 			if err := core.ListCollections(); err != nil {
 				fmt.Printf("Error listing collections: %v\n", err)
 				os.Exit(1)
 			}
-		case "runnables":
-			if len(os.Args) < 4 {
-				fmt.Println("Usage: shellican list runnables <collection>")
-				os.Exit(1)
-			}
-			collection := os.Args[3]
+		} else {
+			// list runnables
+			collection := args[0]
 			if err := core.ListRunnables(collection); err != nil {
 				fmt.Printf("Error listing runnables: %v\n", err)
 				os.Exit(1)
 			}
-		default:
-			fmt.Printf("Unknown type: %s. Use 'collections' or 'runnables'\n", subCmd)
-			os.Exit(1)
 		}
 
 	case "import":
@@ -209,12 +175,9 @@ func printUsage() {
 	fmt.Println("Usage:")
 	fmt.Println("  shellican run <collection> <runnable> [args...]")
 	fmt.Println("  shellican create-shell <collection> [name]")
-	fmt.Println("  shellican new collection <name>")
-	fmt.Println("  shellican new runnable <collection> <name>")
-	fmt.Println("  shellican list collections")
-	fmt.Println("  shellican list runnables <collection>")
-	fmt.Println("  shellican show collection <name> [--readme]")
-	fmt.Println("  shellican show runnable <collection> <name> [--readme]")
+	fmt.Println("  shellican new <collection> [runnable]")
+	fmt.Println("  shellican list [collection]")
+	fmt.Println("  shellican show <collection> [runnable] [--readme]")
 	fmt.Println("  shellican import <source> [name]")
 	fmt.Println("  shellican export <collection> [output]")
 }
