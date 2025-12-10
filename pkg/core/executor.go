@@ -91,7 +91,6 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 	cfg := ctx.Config
 
 	if cfg.Before != "" {
-		fmt.Println(">> Running pre-hooks...")
 		if err := runShell(cfg.Before, args, ctx.Environments, ctx.RunnablePath); err != nil {
 			return fmt.Errorf("pre-hook failed: %s: %w", cfg.Before, err)
 		}
@@ -116,7 +115,6 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 	}
 
 	if cfg.After != "" {
-		fmt.Println(">> Running post-hooks...")
 		if err := runShell(cfg.After, args, ctx.Environments, ctx.RunnablePath); err != nil {
 			fmt.Printf("Warning: post-hook failed: %s: %v\n", cfg.After, err)
 		}
