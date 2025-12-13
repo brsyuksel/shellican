@@ -91,7 +91,7 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 	cfg := ctx.Config
 
 	if cfg.Before != "" {
-		if err := runShell(cfg.Before, args, ctx.Environments, ctx.RunnablePath); err != nil {
+		if err := executeOrShell(cfg.Before, args, ctx.Environments, ctx.RunnablePath); err != nil {
 			return fmt.Errorf("pre-hook failed: %s: %w", cfg.Before, err)
 		}
 	}
@@ -100,22 +100,12 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 		return fmt.Errorf("no 'run' command specified in runnable.yml")
 	}
 
-	runCmdPath := filepath.Join(ctx.RunnablePath, cfg.Run)
-	info, err := os.Stat(runCmdPath)
-	isScript := err == nil && !info.IsDir()
-
-	if isScript {
-		err = runScript(runCmdPath, args, ctx.Environments)
-	} else {
-		err = runShell(cfg.Run, args, ctx.Environments, ctx.RunnablePath)
-	}
-
-	if err != nil {
+	if err := executeOrShell(cfg.Run, args, ctx.Environments, ctx.RunnablePath); err != nil {
 		return fmt.Errorf("execution failed: %w", err)
 	}
 
 	if cfg.After != "" {
-		if err := runShell(cfg.After, args, ctx.Environments, ctx.RunnablePath); err != nil {
+		if err := executeOrShell(cfg.After, args, ctx.Environments, ctx.RunnablePath); err != nil {
 			fmt.Printf("Warning: post-hook failed: %s: %v\n", cfg.After, err)
 		}
 	}
@@ -123,8 +113,9 @@ func ExecuteContext(ctx *ExecutionContext, args []string) error {
 	return nil
 }
 
-func runScript(path string, args []string, envs map[string]string) error {
+func runScript(path string, args []string, envs map[string]string, dir string) error {
 	cmd := exec.Command(path, args...)
+	cmd.Dir = dir
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -152,4 +143,15 @@ func runShell(command string, args []string, envs map[string]string, dir string)
 	}
 
 	return shellCmd.Run()
+}
+
+func executeOrShell(command string, args []string, envs map[string]string, dir string) error {
+	cmdPath := filepath.Join(dir, command)
+	info, err := os.Stat(cmdPath)
+	isScript := err == nil && !info.IsDir()
+
+	if isScript {
+		return runScript(cmdPath, args, envs, dir)
+	}
+	return runShell(command, args, envs, dir)
 }
