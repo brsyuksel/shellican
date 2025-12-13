@@ -107,3 +107,42 @@ func TestExecuteContext(t *testing.T) {
 		t.Errorf("ExecuteContext failed for simple true command: %v", err)
 	}
 }
+
+func TestExecuteContext_BeforeScriptArgs(t *testing.T) {
+	tempDir := t.TempDir()
+
+	// Create before script
+	beforeScript := filepath.Join(tempDir, "before.sh")
+	scriptContent := `#!/bin/sh
+echo "$@" > args.out
+`
+	if err := os.WriteFile(beforeScript, []byte(scriptContent), 0755); err != nil {
+		t.Fatalf("Failed to write before script: %v", err)
+	}
+
+	ctx := &ExecutionContext{
+		RunnablePath: tempDir,
+		Config: &config.RunnableConfig{
+			Before: "./before.sh",
+			Run:    "true",
+		},
+		Environments: map[string]string{},
+	}
+
+	args := []string{"arg1", "arg2"}
+	if err := ExecuteContext(ctx, args); err != nil {
+		t.Fatalf("ExecuteContext failed: %v", err)
+	}
+
+	// Read args.out
+	outBytes, err := os.ReadFile(filepath.Join(tempDir, "args.out"))
+	if err != nil {
+		t.Fatalf("Failed to read args.out: %v", err)
+	}
+	outStr := string(outBytes)
+	// Expect "arg1 arg2\n"
+	expected := "arg1 arg2\n"
+	if outStr != expected {
+		t.Errorf("Expected args '%s', got '%s'", expected, outStr)
+	}
+}
