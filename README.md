@@ -94,6 +94,10 @@ environments:
   LOCAL_VAR: "123"
 ```
 
+## Examples
+
+- [dirty-vm](https://github.com/brsyuksel/dirty-vm) - A collection for creating and managing virtual machines with QEMU, cloud-init, and networking support.
+
 ## Contributing
 
 1. Fork the repo
