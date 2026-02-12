@@ -10,6 +10,10 @@
 ![Release](https://github.com/brsyuksel/shellican/actions/workflows/release.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brsyuksel/shellican)](https://goreportcard.com/report/github.com/brsyuksel/shellican)
 
+<div align="center">
+  <img src="assets/shellican-v0.4.0.gif" alt="shellican demo" width="800" />
+</div>
+
 ## Why shellican?
 
 **shellican** bridges the gap between simple shell aliases and complex Makefile setups.
