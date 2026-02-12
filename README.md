@@ -10,10 +10,6 @@
 ![Release](https://github.com/brsyuksel/shellican/actions/workflows/release.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brsyuksel/shellican)](https://goreportcard.com/report/github.com/brsyuksel/shellican)
 
-<div align="center">
-  <img src="assets/shellican.gif" alt="shellican demo" width="800" />
-</div>
-
 ## Why shellican?
 
 **shellican** bridges the gap between simple shell aliases and complex Makefile setups.
@@ -61,13 +57,17 @@ Default storage location: `~/.shellican` (or `$SHELLICAN_HOME/.shellican`).
 
 ### Commands
 
-- **New Collection**: `shellican new collection <name>`
-- **New Runnable**: `shellican new runnable <collection> <name>`
+- **New Collection**: `shellican new <collection>`
+- **New Runnable**: `shellican new <collection> <runnable>`
 - **Run**: `shellican run <collection> <runnable> [args...]`
-- **List**: `shellican list collections` or `shellican list runnables <collection>`
-- **Show**: `shellican show collection <name>` or `shellican show runnable <collection> <name>`
-- **Create Shell Shortcut**: `shellican create-shell <collection>` (creates `~/.local/bin/<collection>-shell`)
-- **Import/Export**: `shellican import <source>` / `shellican export <collection>`
+- **List Collections**: `shellican list`
+- **List Runnables**: `shellican list <collection>`
+- **Show Collection**: `shellican show <collection> [--readme]`
+- **Show Runnable**: `shellican show <collection> <runnable> [--readme]`
+- **Create Shell Helper**: `shellican create-shell <collection> [name]` (creates `~/.local/bin/<collection>-shell`)
+- **Import Collection**: `shellican import <source> [name]`
+- **Export Collection**: `shellican export <collection> [output]`
+- **Version**: `shellican version`
 
 ## Configuration
 

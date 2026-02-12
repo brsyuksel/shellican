@@ -60,3 +60,15 @@ func LoadRunnableConfig(path string) (*RunnableConfig, error) {
 	}
 	return &cfg, nil
 }
+
+// SaveCollectionConfig saves the collection configuration to the given path.
+func SaveCollectionConfig(path string, cfg *CollectionConfig) error {
+	data, err := yaml.Marshal(cfg)
+	if err != nil {
+		return fmt.Errorf("failed to marshal collection config: %w", err)
+	}
+	if err := os.WriteFile(filepath.Join(path, "collection.yml"), data, 0644); err != nil {
+		return fmt.Errorf("failed to write collection.yml: %w", err)
+	}
+	return nil
+}

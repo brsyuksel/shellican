@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/brsyuksel/shellican/pkg/config"
 )
 
 // CreateCollection creates a new collection.
@@ -26,7 +28,6 @@ func CreateCollection(name string) error {
 help: "Usage for %s"
 readme: "README.md"
 runnables: []
-  # - example_runnable
 environments:
   COLLECTION_ENV: "value"
 `, name, name)
@@ -88,7 +89,32 @@ environments:
 		fmt.Printf("Warning: failed to create README.md: %v\n", err)
 	}
 
-	fmt.Printf("Runnable '%s' created at %s\n", runnableName, runnablePath)
-	fmt.Println("Hint: Don't forget to add it to 'runnables' in collection.yml!")
+	// Load collection config and add the runnable
+	collectionCfg, err := config.LoadCollectionConfig(collectionPath)
+	if err != nil {
+		return fmt.Errorf("failed to load collection config: %w", err)
+	}
+	if collectionCfg == nil {
+		return fmt.Errorf("collection config not found")
+	}
+
+	// Add runnable to the list if not already present
+	found := false
+	for _, r := range collectionCfg.Runnables {
+		if r == runnableName {
+			found = true
+			break
+		}
+	}
+	if !found {
+		collectionCfg.Runnables = append(collectionCfg.Runnables, runnableName)
+	}
+
+	// Save updated collection config
+	if err := config.SaveCollectionConfig(collectionPath, collectionCfg); err != nil {
+		return fmt.Errorf("failed to save collection config: %w", err)
+	}
+
+	fmt.Printf("Runnable '%s' created and added to collection at %s\n", runnableName, runnablePath)
 	return nil
 }
