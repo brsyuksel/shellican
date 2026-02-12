@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/brsyuksel/shellican/pkg/config"
 )
 
 func TestCreateCollection(t *testing.T) {
@@ -54,6 +56,27 @@ func TestCreateRunnable(t *testing.T) {
 
 	if _, err := os.Stat(filepath.Join(runPath, "runnable.yml")); os.IsNotExist(err) {
 		t.Errorf("runnable.yml not created")
+	}
+
+	// Verify runnable was added to collection.yml
+	colPath := filepath.Join(tempDir, ".shellican", colName)
+	cfg, err := config.LoadCollectionConfig(colPath)
+	if err != nil {
+		t.Fatalf("Failed to load collection config: %v", err)
+	}
+	if cfg == nil {
+		t.Fatal("Collection config is nil")
+	}
+
+	found := false
+	for _, r := range cfg.Runnables {
+		if r == runName {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Errorf("Runnable '%s' not found in collection.yml runnables list", runName)
 	}
 
 	// Missing collection test
